@@ -1,0 +1,20 @@
+[project]
+name = "readonly-sql-mcp"
+version = "0.0.1"
+description = "An MCP server that gives an agent read-only SQL access, with independent locks and evaluations."
+requires-python = ">=3.11"
+dependencies = ["mcp>=2.3", "sqlglot>=30"]
+
+[project.optional-dependencies]
+dev = ["pytest>=9"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
