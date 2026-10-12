@@ -12,6 +12,9 @@ def main_db(tmp_path):
     path = tmp_path / "main.db"
     con = sqlite3.connect(path)
     con.execute("CREATE TABLE t (x INTEGER)")
+    # Without an index, REINDEX has nothing to rebuild and SQLite never asks
+    # the authorizer: the attack must have something to write to be tested.
+    con.execute("CREATE INDEX ix ON t (x)")
     con.execute("INSERT INTO t VALUES (1)")
     con.commit()
     con.close()
@@ -37,6 +40,9 @@ def other_db(tmp_path):
     "DROP TABLE t",
     "CREATE TABLE u (y)",
     "PRAGMA query_only = 0",
+    "VACUUM INTO 'copy.db'",  # writes a whole new file to disk
+    "ANALYZE",
+    "REINDEX",
 ])
 def test_writes_on_main_file_are_refused(main_db, sql):
     con = open_readonly(main_db)
