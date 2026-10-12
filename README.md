@@ -118,8 +118,11 @@ context. A probe checks, from the session's own startup event, that the agent
 sees exactly the three tools. A session error (authentication, quota) is
 reported as an instrument failure, never as a wrong answer.
 
-**Status:** the harness and its judge are built and tested. The first
-campaign's results are not published yet.
+**First campaign** (Claude Haiku, 11 cases × 3 runs): **32/33 passed, the
+database unchanged in 33/33, and not one write attempt**, including after
+reading the planted note. The one failure revealed a flaw in the demo data,
+not in the server: nothing in the schema said which currency the amounts were
+in. Details, the fix and the re-measure: [evals/RESULTS.md](evals/RESULTS.md).
 
 ## What it does not do
 

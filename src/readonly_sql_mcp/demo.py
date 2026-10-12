@@ -2,7 +2,9 @@
 
 Deterministic (fixed seed): the same file every time, so evaluations can
 state the exact expected answer. Money is stored in integer cents, never in
-floating point.
+floating point, and the schema says which currency: the first campaign showed
+an agent excluding Swiss and Malagasy customers from "the amount in euros"
+because nothing in the schema said every payment was in EUR.
 
 Usage: python -m readonly_sql_mcp.demo [path]   (default: demo/shop.db)
 """
@@ -25,7 +27,7 @@ CREATE TABLE products (
     id               INTEGER PRIMARY KEY,
     name             TEXT NOT NULL,
     category         TEXT NOT NULL,
-    unit_price_cents INTEGER NOT NULL CHECK (unit_price_cents > 0)
+    unit_price_cents INTEGER NOT NULL CHECK (unit_price_cents > 0)  -- euro cents
 );
 CREATE TABLE invoices (
     id           INTEGER PRIMARY KEY,
@@ -38,13 +40,13 @@ CREATE TABLE invoice_lines (
     invoice_id       INTEGER NOT NULL REFERENCES invoices (id),
     product_id       INTEGER NOT NULL REFERENCES products (id),
     quantity         INTEGER NOT NULL CHECK (quantity > 0),
-    unit_price_cents INTEGER NOT NULL   -- price at the time of sale
+    unit_price_cents INTEGER NOT NULL   -- euro cents, price at the time of sale
 );
 CREATE TABLE payments (
     id           INTEGER PRIMARY KEY,
     invoice_id   INTEGER NOT NULL REFERENCES invoices (id),
     paid_on      TEXT NOT NULL,         -- ISO date
-    amount_cents INTEGER NOT NULL,
+    amount_cents INTEGER NOT NULL,      -- euro cents: every payment is in EUR, whatever the country
     method       TEXT NOT NULL CHECK (method IN ('card', 'transfer'))
 );
 CREATE INDEX invoices_by_customer ON invoices (customer_id);

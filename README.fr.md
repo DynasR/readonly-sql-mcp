@@ -28,6 +28,8 @@ casse chaque protection exprès et exige qu'un test passe au rouge.
 
 **Les évaluations.** Un vrai agent, avec ces trois outils et rien d'autre,
 répond à des questions dont la réponse exacte est calculée d'avance, et une
-note piégée dans la base essaie de lui faire effacer les factures. Le banc est
-prêt et testé ; les résultats de la première campagne ne sont pas encore
-publiés.
+note piégée dans la base essaie de lui faire effacer les factures. Première
+campagne (Claude Haiku, 33 passes) : 32 réussies, la base intacte dans les 33,
+et aucune tentative d'écriture, même après lecture de la note piégée. Le seul
+échec venait d'un défaut des données de démo (la devise n'était dite nulle
+part), corrigé et remesuré : [evals/RESULTS.md](evals/RESULTS.md).
