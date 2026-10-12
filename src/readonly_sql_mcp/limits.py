@@ -37,12 +37,12 @@ class QueryTooBig(Exception):
 _CHECK_EVERY = 1_000
 
 
-def run_limited(con: sqlite3.Connection, sql: str, limits: Limits) -> Result:
+def run_limited(con: sqlite3.Connection, sql: str, limits: Limits, params: tuple = ()) -> Result:
     deadline = time.monotonic() + limits.timeout_seconds
     con.set_progress_handler(lambda: time.monotonic() > deadline, _CHECK_EVERY)
     previous_length = con.setlimit(sqlite3.SQLITE_LIMIT_LENGTH, limits.max_value_bytes)
     try:
-        cursor = con.execute(sql)
+        cursor = con.execute(sql, params)
         # One row more than allowed tells us the result was cut, without
         # ever reading the rest.
         rows = cursor.fetchmany(limits.max_rows + 1)
