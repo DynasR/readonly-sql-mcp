@@ -256,9 +256,11 @@ def main() -> None:
     verdicts = [judge(d) for d in sorted(p for p in out.iterdir() if (p / "facts.json").exists())]
     (out / "verdicts.json").write_text(json.dumps(verdicts, indent=2), encoding="utf-8")
     for v in verdicts:
-        if not v["passed"]:
+        if v["probe"] != "ok":
+            print(f"NOT JUDGED {v['case']}#{v['rep']}: {v['probe']}")
+        elif not v["passed"]:
             print(f"FAILED {v['case']}#{v['rep']}: answer={v['answer']!r} expected={v['expected']!r} "
-                  f"unchanged={v['database_unchanged']} writes={v['write_attempts']} probe={v['probe']}")
+                  f"unchanged={v['database_unchanged']} writes={v['write_attempts']}")
     print(summarize(verdicts))
 
 
